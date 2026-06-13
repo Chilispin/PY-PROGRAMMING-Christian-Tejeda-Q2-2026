@@ -1,0 +1,58 @@
+INPUT
+GET a, b, f_x, method from user
+
+# PROCESS
+IF "pi" in a THEN
+    a <- EVALUATE(a with "pi" replaced by MATH_PI)
+ELSE
+    a <- CONVERT_TO_FLOAT(a)
+ENDIF
+
+IF "pi" in b THEN
+    b <- EVALUATE(b with "pi" replaced by MATH_PI)
+ELSE
+    b <- CONVERT_TO_FLOAT(b)
+ENDIF
+
+n <- 1000
+h <- (b - a) / n
+area <- 0.0
+shift <- 0
+constant <- 0
+variable <- 0
+
+# METHODS CONFIGURATION
+IF method is equal "RRM" THEN
+    shift <- 1
+ENDIF
+
+IF method is equal "MRM" THEN
+    constant <- h / 2
+ENDIF
+
+IF method is equal "TRAP" THEN
+    variable <- 1
+    
+    f_0 <- REPLACE "x" WITH a IN f_x
+    area <- area + (h / 2) * EVALUATE(f_0)
+    
+    FOR i in RANGE(variable, n) DO
+        xi <- a + i * h
+        f_xi <- REPLACE "x" WITH xi IN f_x
+        area <- area + (h / 2) * 2 * EVALUATE(f_xi)
+    ENDFOR
+    
+    f_xn <- REPLACE "x" WITH b IN f_x
+    area <- area + (h / 2) * EVALUATE(f_xn)
+
+ELSE
+    # For LRM, RRM, and MRM
+    FOR i in RANGE(shift, n + shift) DO
+        xi <- a + i * h
+        height <- REPLACE "x" WITH (xi + constant) IN f_x
+        area <- area + h * EVALUATE(height)
+    ENDFOR
+ENDIF
+
+# OUTPUT
+DISPLAY "The integration of " + f_x + " is " + area
