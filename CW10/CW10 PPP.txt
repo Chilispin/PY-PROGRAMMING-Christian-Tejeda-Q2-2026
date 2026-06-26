@@ -1,0 +1,106 @@
+Algoritmo Sistema_Escolar_UPY
+    // Definición de estructuras (Simulación en Pseudocódigo)
+    Definir usuarios, calificaciones, materias Como Estructura
+    Definir usuario_ingresado, password_ingresado, rol_activo, nombre_activo Como Cadena
+    Definir login_exitoso Como Logico
+    
+    // Inicializar materias (Tupla)
+    materias <- ["Matemáticas", "Programación", "Inglés"]
+    
+    // El sistema simula tener cargados los 6 alumnos, 1 maestro y 1 coordinador
+    // (Datos omitidos en pseudocódigo por brevedad, inicializados en el sistema)
+    
+    // --- SECCIÓN 1: LOGIN MULTIINTENTO ---
+    login_exitoso <- Falso
+    Mientras login_exitoso = Falso Hacer
+        Escribir "Usuario: "
+        Leer usuario_ingresado
+        Escribir "Contraseña: "
+        Leer password_ingresado
+        
+        Si Existe(usuarios, usuario_ingresado) Y usuarios[usuario_ingresado].password = password_ingresado Entonces
+            login_exitoso <- Verdadero
+            rol_activos <- usuarios[usuario_ingresado].rol
+            nombre_activo <- usuarios[usuario_ingresado].nombre
+            Escribir "Bienvenido, ", nombre_activos, " (", rol_activo, ")"
+        Sino
+            Escribir "Usuario o contraseña incorrectos. Intente de nuevo."
+        FinSi
+    FinMientras
+    
+    // --- SECCIÓN 2: MENÚS POR ROL (Según/Switch o If-Elif) ---
+    Segun rol_activo Hacer
+        "alumno":
+            Escribir "--- Boleta de ", nombre_activo, " ---"
+            Definir aprobadas, pendientes Como Conjunto
+            
+            // Recorrer las materias fijas de la tupla
+            Para Cada mat En materias Hacer
+                Definir calif Como Real
+                calif <- calificaciones[usuario_ingresado][mat]
+                Escribir mat, ": ", calif
+                
+                // Clasificación en conjuntos (Sets)
+                Si calif >= 8.0 Entonces
+                    AgregarAConjunto(aprobadas, mat)
+                FinSi
+            Anterior
+            
+            // Pendientes es la diferencia: total materias menos aprobadas
+            pendientes <- DiferenciaConjuntos(materias, aprobadas)
+            
+            Escribir "Materias aprobadas: ", aprobadas
+            Escribir "Materias pendientes: ", pendientes
+            
+        "maestro":
+            Escribir "--- Lista de Alumnos ---"
+            Para Cada usr En usuarios Hacer
+                Si usuarios[usr].rol = "alumno" Entonces
+                    Escribir "- ", usuarios[usr].nombre, " (Username: ", usr, ")"
+                FinSi
+            Anterior
+            
+            Definir alumno_a_calificar, materia_a_calificar Como Cadena
+            Definir nueva_nota Como Real
+            
+            Escribir "Alumno (username): "
+            Leer alumno_a_calificar
+            Escribir "Materia: "
+            Leer materia_a_calificar
+            
+            // Validar que la materia exista en la tupla
+            Si ExisteEnTupla(materias, materia_a_calificar) Entonces
+                Escribir "Nueva calificación: "
+                Leer nueva_nota
+                
+                // Actualizar registro
+                calificaciones[alumno_a_calificar][materia_a_calificar] <- nueva_nota
+                Escribir "Calificación actualizada con éxito."
+            Sino
+                Escribir "Error: La materia no es válida."
+            FinSi
+            
+        "coordinador":
+            Escribir "--- REPORTE GENERAL (SOLO LECTURA) ---"
+            
+            Escribir "1. Lista de Maestros:"
+            Para Cada usr En usuarios Hacer
+                Si usuarios[usr].rol = "maestro" Entonces
+                    Escribir "- ", usuarios[usr].nombre
+                FinSi
+            Anterior
+            
+            Escribir "2. Lista de Materias del Plan:"
+            Para Cada mat En materias Hacer
+                Escribir "- ", mat
+            Anterior
+            
+            Escribir "3. Calificaciones Globales de Estudiantes:"
+            Para Cada estudiante En calificaciones Hacer
+                Escribir "Estudiante: ", usuarios[estudiante].nombre
+                Para Cada mat En materias Hacer
+                    Escribir "  ", mat, ": ", calificaciones[estudiante][mat]
+                Anterior
+            Anterior
+    FinSegun
+FinAlgoritmo
