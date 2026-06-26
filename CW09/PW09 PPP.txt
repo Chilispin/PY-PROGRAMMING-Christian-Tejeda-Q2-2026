@@ -1,0 +1,44 @@
+Algoritmo ConjugadorVerbos
+    // ENTRADA
+    Escribir "Ingrese verbo: "
+    Leer verbo
+    
+    // PROCESO
+    // Lista de pronombres
+    Dimension pronombres[6]
+    pronombres[1] <- "yo"
+    pronombres[2] <- "tu"
+    pronombres[3] <- "el"
+    pronombres[4] <- "nosotros"
+    pronombres[5] <- "vosotros"
+    pronombres[6] <- "ellos"
+    
+    // Obtener raíz y terminación (asumiendo funciones de manejo de cadenas)
+    // Longitud(verbo) - 2 nos da la raíz, y las últimas 2 letras la terminación
+    largo <- Longitud(verbo)
+    raiz <- Subcadena(verbo, 1, largo - 2)
+    terminacion_verbo <- Subcadena(verbo, largo - 1, largo)
+    
+    // Definir las matrices de sufijos según el tipo de verbo
+    Dimension sufijos[6]
+    
+    Si terminacion_verbo = "ar" Entonces
+        sufijos[1] <- "o"; sufijos[2] <- "as"; sufijos[3] <- "a"
+        sufijos[4] <- "amos"; sufijos[5] <- "ais"; sufijos[6] <- "an"
+    Sino 
+        Si terminacion_verbo = "er" Entonces
+            sufijos[1] <- "o"; sufijos[2] <- "es"; sufijos[3] <- "e"
+            sufijos[4] <- "emos"; sufijos[5] <- "eis"; sufijos[6] <- "en"
+        Sino 
+            Si terminacion_verbo = "ir" Entonces
+                sufijos[1] <- "o"; sufijos[2] <- "es"; sufijos[3] <- "e"
+                sufijos[4] <- "imos"; sufijos[5] <- "is"; sufijos[6] <- "en"
+            FinSi
+        FinSi
+    FinSi
+    
+    // SALIDA
+    Para index <- 1 Hasta 6 Con Paso 1 Hacer
+        Escribir pronombres[index], " ", raiz, sufijos[index]
+    FinPara
+FinAlgoritmo
