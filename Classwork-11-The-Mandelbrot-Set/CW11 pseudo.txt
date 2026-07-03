@@ -1,0 +1,44 @@
+Algoritmo Generar_Puntos_CSV
+    // Importar funcionalidad de números aleatorios (implícito en lógica)
+    Definir archivo Como Texto
+    Definir x, y, distancia Como Real
+    Definir iteraciones, color, i Como Entero
+    
+    // CREAR Y ABRIR CSV
+    Abrir "archivo.csv" Para Escritura Como archivo
+    
+    // ESCRIBIR ENCABEZADOS
+    EscribirEnArchivo archivo, "X,Y,COLOR"
+    
+    // BUCLE PRINCIPAL PARA 100,000 PUNTOS
+    Para i <- 1 Hasta 100000 Con Paso 1 Hacer
+        // Generar coordenadas aleatorias uniformes entre -10 y 10
+        x <- AleatorioUniforme(-10, 10)
+        y <- AleatorioUniforme(-10, 10)
+        
+        // Calcular la distancia euclidiana desde el origen (0,0)
+        distancia <- (x * x + y * y) ^ 0.5
+        iteraciones <- 0
+        color <- 0
+        
+        // BUCLE DE VALIDACIÓN / TRANSFORMACIÓN
+        Mientras (distancia < 1) Y (iteraciones < 100) Hacer
+            distancia <- distancia ^ 2
+            iteraciones <- iteraciones + 1
+        FinMientras
+        
+        // ASIGNACIÓN DE COLOR SEGÚN LA DISTANCIA FINAL
+        Si distancia > 1 Entonces
+            color <- 255
+        FinSi
+        
+        // REGISTRAR LOS DATOS EN EL ARCHIVO CSV
+        EscribirEnArchivo archivo, x, ",", y, ",", color
+    FinPara
+    
+    // CERRAR ARCHIVO
+    CerrarArchivo archivo
+    
+    // NOTIFICACIÓN FINAL
+    Escribir "Done"
+FinAlgoritmo
