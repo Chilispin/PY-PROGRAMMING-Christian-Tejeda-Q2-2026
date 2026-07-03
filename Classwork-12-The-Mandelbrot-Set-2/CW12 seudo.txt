@@ -1,0 +1,62 @@
+# Classwork 11 - Mandelbrot Image Generation Pseudocode
+
+START
+    # Initialize configuration dictionary
+    config ← Empty Dictionary
+
+    # Open and read configuration file
+    OPEN "config.txt" in READ mode AS archivo
+    FOR EACH linea IN archivo DO
+        Clean linea by removing whitespaces
+        Split linea by "=" delimiter INTO clave, valor
+        IF "." IN valor THEN
+            config[clave] ← ConvertToFloat(valor)
+        ELSE
+            config[clave] ← ConvertToInteger(valor)
+        END IF
+    END FOR
+    CLOSE archivo
+
+    # Open and read the Mandelbrot data CSV file
+    OPEN "clase.csv" in READ mode AS data
+    datos ← ReadAllLines(data)
+    CLOSE data
+
+    # Parse grid boundaries from configuration
+    ancho ← config["alto"]
+    alto ← config["ancho"]
+    max_iter ← config["max_iter"]
+
+    # Create a new image canvas in HSV mode
+    img ← CreateNewImage("HSV", width = alto, height = ancho)
+
+    # Remove the first line containing the CSV headers
+    encabezados ← RemoveFirstElement(datos)
+
+    # Loop through each data row to draw the fractal pixels
+    FOR EACH dato IN datos DO
+        Clean dato by removing whitespaces
+        Split dato by "," delimiter INTO fila_str, columna_str, iteraciones_str
+        
+        # Convert values to integers
+        fila ← ConvertToInteger(fila_str)
+        columna ← ConvertToInteger(columna_str)
+        iteraciones ← ConvertToInteger(iteraciones_str)
+
+        # Calculate pixel brightness based on execution escape iterations
+        IF iteraciones IS EQUAL TO max_iter THEN
+            brillo ← 40
+        ELSE
+            brillo ← ConvertToInteger((iteraciones / max_iter) * 255)
+        END IF
+
+        # Apply the color to the specific pixel coordinate (X=columna, Y=fila)
+        ApplyPixelToImage(img, X = columna, Y = fila, Color = [brillo, 255, 255])
+    END FOR
+
+    # Convert the final image to RGB mode and save it
+    img_rgb ← ConvertImageMode(img, "RGB")
+    SAVE img_rgb AS "mandelbrot.clase.png"
+
+    PRINT "DONE"
+END
