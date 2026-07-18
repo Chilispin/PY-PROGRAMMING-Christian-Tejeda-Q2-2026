@@ -1,0 +1,100 @@
+
+PPP (Pseudocode Programming Process) - SORTING ALGORITHMS
+START
+    # INPUT
+    Set original_list = Generate 10 random integers between 0 and 100
+    Define algorithm_to_use = "selection"  // Options: "bubble", "selection", "insertion"
+    
+    Create numbers_to_sort as an exact copy of original_list
+    Print "Original list: " + numbers_to_sort
+    Print "Running animation for: " + algorithm_to_use
+    
+    # PROCESS
+    Configure stddraw window (X scales between -0.1 and 10, Y scales between -0.5 and max_value + 1)
+    
+    IF algorithm_to_use is equal to "bubble" THEN
+        Call bubble_sort_animated(numbers_to_sort)
+    ELSE IF algorithm_to_use is equal to "selection" THEN
+        Call selection_sort_animated(numbers_to_sort)
+    ELSE IF algorithm_to_use is equal to "insertion" THEN
+        Call insertion_sort_animated(numbers_to_sort)
+    END IF
+    
+    # OUTPUT
+    Print "Final sorted list: " + numbers_to_sort
+END
+FUNCTION: bubble_sort_animated(numbers)
+START
+    Define n = length of numbers
+    FOR sweep FROM 0 TO n - 1 DO
+        Define swapped = FALSE
+        FOR pair FROM 0 TO n - 1 - sweep DO
+            Call draw_bars(numbers, selected=[pair, pair+1])
+            IF numbers[pair] > numbers[pair+1] THEN
+                Swap numbers[pair] with numbers[pair+1]
+                swapped = TRUE
+            END IF
+            Call draw_bars(numbers, selected=[pair, pair+1])
+        END FOR
+        
+        IF swapped is FALSE THEN
+            Terminate sweep loop early (Break)
+        END IF
+    END FOR
+    Call draw_bars(numbers)
+END
+FUNCTION: selection_sort_animated(numbers)
+START
+    Define n = length of numbers
+    FOR i FROM 0 TO n - 1 DO
+        Define min_idx = i
+        FOR j FROM i + 1 TO n - 1 DO
+            Call draw_bars(numbers, selected=[min_idx, j])
+            IF numbers[j] < numbers[min_idx] THEN
+                min_idx = j
+            END IF
+        END FOR
+        
+        Call draw_bars(numbers, selected=[i, min_idx])
+        Swap numbers[i] with numbers[min_idx]
+        Call draw_bars(numbers, selected=[i, min_idx])
+    END FOR
+    Call draw_bars(numbers)
+END
+
+FUNCTION: insertion_sort_animated(numbers)
+START
+    Define n = length of numbers
+    FOR i FROM 1 TO n - 1 DO
+        Define key = numbers[i]
+        Define j = i - 1
+        
+        WHILE j >= 0 AND numbers[j] > key DO
+            Call draw_bars(numbers, selected=[j, j + 1])
+            numbers[j + 1] = numbers[j]
+            Call draw_bars(numbers, selected=[j, j + 1])
+            j = j - 1
+        END WHILE
+        
+        numbers[j + 1] = key
+        Call draw_bars(numbers)
+    END FOR
+    Call draw_bars(numbers)
+END
+FUNCTION: draw_bars(numbers, selected)
+START
+    Clear stddraw screen
+    Define n = length of numbers
+    Define bar_width = 10.0 / n
+    
+    FOR EACH index i and value number IN numbers DO
+        Calculate position x = i * bar_width + bar_width / 2
+        IF i is contained in selected THEN
+            Assign color Red (255, 90, 90)
+        ELSE
+            Assign color Blue (70, 130, 220)
+        END IF
+        Draw filled rectangle at (x, 0) with width bar_width * 0.9 and height number
+    END FOR
+    Show stddraw screen with a delay of 100 milliseconds
+END
