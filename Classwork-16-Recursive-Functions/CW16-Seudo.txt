@@ -1,0 +1,129 @@
+======================================================
+PSEUDOCODE PROGRAMMING PROCESS (PPP)
+Classwork 16 - Recursive Functions
+======================================================
+
+1. FUNCTION recursiva(n):
+    IF n is not an integer THEN
+        RETURN "Error: Input must be an integer."
+    IF n < 0 THEN
+        RETURN "Error: Input must be a non-negative integer."
+    
+    IF n == 0 THEN
+        RETURN "Done!"
+    ELSE
+        PRINT n
+        RETURN recursiva(n - 1)
+
+------------------------------------------------------
+
+2. FUNCTION fibonacci(n):
+    IF n is not an integer THEN
+        RETURN "Error: Input must be an integer."
+    IF n < 0 THEN
+        RETURN "Error: Input must be a non-negative integer."
+    
+    IF n == 0 OR n == 1 THEN
+        RETURN n
+    ELSE
+        RETURN fibonacci(n - 1) + fibonacci(n - 2)
+
+------------------------------------------------------
+
+3. FUNCTION factorial(n):
+    IF n is not an integer THEN
+        RETURN "Error: Input must be an integer."
+    IF n < 0 THEN
+        RETURN "Error: Input must be a non-negative integer."
+    
+    IF n == 0 OR n == 1 THEN
+        RETURN 1
+    ELSE
+        RETURN factorial(n - 1) * n
+
+------------------------------------------------------
+
+4. FUNCTION multiplicacion_recursiva(n, m):
+    IF n or m are invalid types OR m is not an integer THEN
+        RETURN "Error: Invalid data types."
+    IF m < 0 THEN
+        RETURN "Error: Multiplier (m) must be a non-negative integer."
+    
+    IF m == 0 THEN
+        RETURN 0
+    ELSE
+        RETURN multiplicacion_recursiva(n, m - 1) + n
+
+------------------------------------------------------
+
+5. FUNCTION division_entera_recursiva(dividendo, divisor):
+    IF dividendo or divisor are not integers THEN
+        RETURN "Error: Inputs must be integers."
+    IF divisor <= 0 THEN
+        RETURN "Error: Divisor must be greater than 0."
+    IF dividendo < 0 THEN
+        RETURN "Error: Dividend must be a non-negative integer."
+    
+    IF dividendo - divisor < 0 THEN
+        RETURN 0
+    ELSE
+        RETURN division_entera_recursiva(dividendo - divisor, divisor) + 1
+
+------------------------------------------------------
+
+6. FUNCTION potencia_recursiva(base, exponente):
+    IF base or exponente are invalid types THEN
+        RETURN "Error: Invalid data types."
+    
+    IF exponente < 0 THEN
+        RETURN 1 / potencia_recursiva(base, -exponente)
+    IF exponente == 0 THEN
+        RETURN 1
+    ELSE
+        RETURN potencia_recursiva(base, exponente - 1) * base
+
+------------------------------------------------------
+
+7. FUNCTION serie_collatz(n):
+    IF n is not an integer THEN
+        RETURN "Error: Input must be an integer."
+    IF n <= 0 THEN
+        RETURN "Error: Input must be a positive integer strictly greater than 0."
+    
+    IF n == 1 THEN
+        PRINT "END!"
+        RETURN 0
+    ELSE
+        IF n % 2 == 0 THEN
+            PRINT n // 2
+            RETURN serie_collatz(n // 2)
+        ELSE
+            PRINT 3 * n + 1
+            RETURN serie_collatz(3 * n + 1)
+
+------------------------------------------------------
+
+8. FUNCTION aplanar_json(diccionario, clave_padre='', separador='.'):
+    IF diccionario is not a dict THEN
+        RETURN "Error: Input must be a dictionary."
+    
+    CREATE empty list 'elementos'
+    TRY
+        FOR EACH (key, value) IN diccionario DO
+            SET nueva_llave = concatenate(clave_padre, separador, key) IF clave_padre ELSE str(key)
+            
+            IF value is a dict THEN
+                EXTEND elementos WITH aplanar_json(value, nueva_llave, separador)
+            ELSE IF value is a list THEN
+                FOR EACH index, item IN value DO
+                    SET llave_lista = concatenate(nueva_llave, separador, index)
+                    IF item is dict OR list THEN
+                        EXTEND elementos WITH aplanar_json(item, llave_lista, separador)
+                    ELSE
+                        APPEND (llave_lista, item) TO elementos
+            ELSE
+                APPEND (nueva_llave, value) TO elementos
+        
+        RETURN dictionary created from 'elementos'
+    CATCH Exception AS e THEN
+        RETURN "Error processing dictionary"
